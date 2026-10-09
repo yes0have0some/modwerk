@@ -67,7 +67,7 @@ SEQGEN owns the trig bit, slide bit and PTCH/HOLD/VOL locks of the steps inside 
 - Not implemented, because they would need a second clock: Vector's free-run lanes, free clock rates (X16/P16/SPD/PCT) and live sub-sequencers. A sub-sequencer that writes into locks is planned as a later add-on.
 - Direction modes are left to the Play Modes module.
 - The trig-condition, micro-timing and RTRG/RTIM encodings are unverified until the emulator check in TESTING.md. PROB, GRV and RTCH default to 0, which writes none of them.
-- Persistence of SEQGEN's own settings is not designed yet; the generated phrase is ordinary pattern data.
+- SEQGEN's dial settings are runtime only in v0.1: they return to defaults after a reboot or project load. The generated phrase is ordinary pattern data and saves and reloads with the project as stock.
 - Stock-flow change: one new gesture (above). Its README entry, alternatives and the neighbouring flows checked will be completed with the native glue.
 
 ## Tests and measurements

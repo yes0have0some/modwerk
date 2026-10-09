@@ -213,7 +213,8 @@
       "Generated pitch is limited to the native ±12-semitone PTCH range on audio tracks. MIDI tracks are planned for a later version.",
       "Free-run lanes, Vector’s free clock rates and live sub-sequencers are not implemented: they would need a second clock. A lock-based sub-sequencer page is planned as a later add-on.",
       "Direction modes are left to the Play Modes module.",
-      "Trig-condition, micro-timing and RTRG/RTIM encodings are unverified until the emulator check; PROB, GRV and RTCH default to 0, which writes none of them."
+      "Trig-condition, micro-timing and RTRG/RTIM encodings are unverified until the emulator check; PROB, GRV and RTCH default to 0, which writes none of them.",
+      "SEQGEN dial settings are runtime only in v0.1 and reset after a reboot or project load; generated trigs and locks save with the project as ordinary pattern data."
     ],
     "effectId": null
   },
