@@ -27,7 +27,10 @@
       "Real, editable trigs and locks on any audio machine"
     ],
     "usage": [
-      "Pending: the exact access gesture is confirmed against the MKI key map before release."
+      "Select an audio track. Hold FUNC and press MIXER (MKII: MENU), choose CONTROL > SEQGEN and press YES.",
+      "GEN: turn any encoder to rewrite the track's phrase with the current seed; YES writes a new variation. FUNC + LEFT/RIGHT rotates it one step; FUNC + NO undoes the last change (again redoes).",
+      "EVO: YES evolves the phrase; AUTO evolves it every 1-16 loops while playing. KEY: scale, root, re-fit, transpose, invert (E) and double (F).",
+      "Press NO to close SEQGEN. Settings are kept until the unit is switched off; the phrase is ordinary pattern data and saves with the project."
     ]
   },
   "controls": [
@@ -255,12 +258,107 @@
     "file": "LICENSE",
     "declaration": "Original SEQGEN engine, tests, documentation and illustration by yes0have0some under MIT. Native interoperability follows MIT octabam (Sam Banks) and the published MIT VECTOR record layout; their notices are retained. The five12 Vector sequencer user guide is musical inspiration only: no five12 code, firmware, tables or assets were used, and no endorsement is claimed. No Elektron firmware or extracted routines are included."
   },
-  "media": [],
+  "media": [
+    {
+      "path": "media/ot-location.png",
+      "captureType": "emulator",
+      "caption": "Hold FUNC and press MIXER (MKII: press MENU), choose CONTROL and move to the new SEQGEN row at the bottom. Press YES to open it on the current audio track.",
+      "alt": "PROJECT menu with CONTROL selected; its list shows AUDIO, INPUT, SEQUENCER, MIDI SEQUENCER, MEMORY, METRONOME and a highlighted SEQGEN row.",
+      "credit": "yes0have0some",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "PROJECT menu",
+        "shows": "location",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "95f9b81aab82749e550f83d3ae67ba77e11a1a7d51c930fbf6685a15baf1b076",
+        "setup": "Native ColdFire port (ot_emu, no DSP), MKI panel; original 1.40C plus SEQGEN only (static stock DSP); blank scratch card, stock first-boot DATE/TIME prompt confirmed with YES; T1 Static, pattern A01, 120 BPM, stopped transport. Actual LCD plane plus visible stock windows rendered at 6x nearest-neighbour in monochrome. No physical hardware or audio qualification."
+      }
+    },
+    {
+      "path": "media/ot-gen.png",
+      "captureType": "emulator",
+      "caption": "The GEN page edits the phrase for track 1. Turning DENS (encoder B) from 10 to 12 regenerated the pattern at once; YES writes a new variation with the next SEED.",
+      "alt": "Window titled SEQGEN T1 GEN with ALGO ACID, DENS 12, SPAN 12, GATE 32, ACNT 48, SEED 1 and the status GENERATED.",
+      "credit": "yes0have0some",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "SEQGEN GEN page",
+        "shows": "controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "95f9b81aab82749e550f83d3ae67ba77e11a1a7d51c930fbf6685a15baf1b076",
+        "setup": "Native ColdFire port (ot_emu, no DSP), MKI panel; original 1.40C plus SEQGEN only (static stock DSP); blank scratch card, stock first-boot DATE/TIME prompt confirmed with YES; T1 Static, pattern A01, 120 BPM, stopped transport. Actual LCD plane plus visible stock windows rendered at 6x nearest-neighbour in monochrome. No physical hardware or audio qualification."
+      }
+    },
+    {
+      "path": "media/ot-evo.png",
+      "captureType": "emulator",
+      "caption": "Press RIGHT for EVO. YES evolves the current phrase in the chosen style; AUTO evolves it every 1-16 loops while the sequencer plays.",
+      "alt": "Window titled SEQGEN T1 EVO with EVO LOW, AMNT 25, AUTO OFF, PROB 0, RTCH 0 and GRV 0.",
+      "credit": "yes0have0some",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "SEQGEN EVO page",
+        "shows": "controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "95f9b81aab82749e550f83d3ae67ba77e11a1a7d51c930fbf6685a15baf1b076",
+        "setup": "Native ColdFire port (ot_emu, no DSP), MKI panel; original 1.40C plus SEQGEN only (static stock DSP); blank scratch card, stock first-boot DATE/TIME prompt confirmed with YES; T1 Static, pattern A01, 120 BPM, stopped transport. Actual LCD plane plus visible stock windows rendered at 6x nearest-neighbour in monochrome. No physical hardware or audio qualification."
+      }
+    },
+    {
+      "path": "media/ot-key.png",
+      "captureType": "emulator",
+      "caption": "Press RIGHT again for KEY: ROOT, SCAL, FIT and TRNS keep every note in the scale. Turn E to invert the pitches and F to copy the first half into the second.",
+      "alt": "Window titled SEQGEN T1 KEY with ROOT C, SCAL MAJ, FIT OFF, TRNS 0, INV TURN and DBL TURN.",
+      "credit": "yes0have0some",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "SEQGEN KEY page",
+        "shows": "controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "95f9b81aab82749e550f83d3ae67ba77e11a1a7d51c930fbf6685a15baf1b076",
+        "setup": "Native ColdFire port (ot_emu, no DSP), MKI panel; original 1.40C plus SEQGEN only (static stock DSP); blank scratch card, stock first-boot DATE/TIME prompt confirmed with YES; T1 Static, pattern A01, 120 BPM, stopped transport. Actual LCD plane plus visible stock windows rendered at 6x nearest-neighbour in monochrome. No physical hardware or audio qualification."
+      }
+    },
+    {
+      "path": "media/ot-generated.png",
+      "captureType": "emulator",
+      "caption": "The result is ordinary pattern data. In GRID RECORDING, hold TRIG 1 to see its generated PTCH lock on the stock PLAYBACK page; edit it like any other lock.",
+      "alt": "Stock PLAYBACK page for a Static track at 120 BPM with the PTCH dial highlighted and locked to +2.0 while trig 1 is held.",
+      "credit": "yes0have0some",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "PLAYBACK page in GRID RECORDING",
+        "shows": "controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "95f9b81aab82749e550f83d3ae67ba77e11a1a7d51c930fbf6685a15baf1b076",
+        "setup": "Native ColdFire port (ot_emu, no DSP), MKI panel; original 1.40C plus SEQGEN only (static stock DSP); blank scratch card, stock first-boot DATE/TIME prompt confirmed with YES; T1 Static, pattern A01, 120 BPM, stopped transport. Actual LCD plane plus visible stock windows rendered at 6x nearest-neighbour in monochrome. No physical hardware or audio qualification."
+      }
+    }
+  ],
   "access": {
-    "location": "Pending confirmation against the MKI key map: hold [TRACK n] and press [RIGHT] on an audio track to open the SEQGEN page (fallback FUNC + TRACK + RIGHT).",
+    "location": "PROJECT > CONTROL > SEQGEN (MKI: FUNC + MIXER; MKII: MENU), for the current audio track.",
     "steps": [
-      "Pending: written after the native glue and emulator walk confirm the gesture and pages."
+      "Select an audio track with its TRACK key.",
+      "Hold FUNC and press MIXER (MKII: press MENU) to open the PROJECT menu.",
+      "Choose CONTROL, move to SEQGEN with DOWN and press YES.",
+      "Turn encoders A-F to edit, LEFT/RIGHT for GEN, EVO and KEY, YES to generate or evolve, NO to close."
     ],
-    "screenshots": []
+    "screenshots": [
+      "media/ot-location.png",
+      "media/ot-gen.png",
+      "media/ot-evo.png",
+      "media/ot-key.png",
+      "media/ot-generated.png"
+    ]
   }
 }

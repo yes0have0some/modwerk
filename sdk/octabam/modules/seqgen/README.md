@@ -4,7 +4,7 @@ Version: `0.1.0-experimental` · author: [@yes0have0some](https://github.com/yes
 
 Generate, evolve and scale-lock a phrase on any Octatrack audio track. SEQGEN writes real trigs and locks, and the stock sequencer plays them. ColdFire only: no DSP code and no effect slot. For original OS 1.40C (MKI and MKII share the image).
 
-**Development draft.** The engine and its record writer pass firmware-free sanitizer tests. The native page, emulator walk, performance record and MKI hardware results are still pending (see [TESTING.md](TESTING.md)). Nothing below is claimed to run on a unit yet.
+**Development draft.** The engine passes firmware-free sanitizer tests, and the native page was walked under the headless ColdFire emulator (MKI and MKII panels). The performance record and hardware results are still pending (see [TESTING.md](TESTING.md)). Nothing below is claimed to run on a unit yet.
 
 ![SEQGEN thumbnail: a sixteen-step phrase with one note moving to a new scale tone](presentation/thumbnail.svg)
 
@@ -45,19 +45,29 @@ Three pages of six controls. Turning any GEN control regenerates with the curren
 | KEY | E | INV | — | Press: invert pitches around the root. |
 | KEY | F | DBL | — | Press: copy the first half of the track into the second half. |
 
-Keys on the SEQGEN page: [YES] generates (GEN page) or evolves (EVO page) with a new seed; [NO] undoes the last SEQGEN change; [FUNC]+[LEFT]/[RIGHT] rotates the phrase one step; [LEFT]/[RIGHT] change page.
+Turning a KEY control: ROOT, SCAL and TRNS regenerate the phrase with the current seed, or with FIT ON re-fit (ROOT, SCAL) or transpose (TRNS) the existing PTCH locks. EVO-page controls take effect on the next YES or AUTO evolve; PROB, RTCH and GRV on the next generation.
+
+Keys on the SEQGEN page:
+
+- [LEFT]/[RIGHT]: previous/next page (GEN, EVO, KEY).
+- [YES]: on GEN, generate with the next SEED; on EVO, evolve the current phrase.
+- [FUNC]+[LEFT]/[RIGHT]: rotate the phrase one step within the track length.
+- [FUNC]+[NO]: undo the last SEQGEN change to the track; press again to redo.
+- [NO]: close SEQGEN and return to PROJECT > CONTROL.
+
+SEQGEN follows the selected TRACK key while open: the title shows the track it edits.
 
 ## Usage
 
-**Access (pending confirmation).** On an audio track, hold [TRACK n] and press [RIGHT] to open the SEQGEN page. This chord is checked against the MKI key map before release; if stock already uses it, the fallback is [FUNC] + [TRACK n] + [RIGHT]. Any parameter page key or the same TRACK key closes the page.
+**Access.** Select an audio track. Hold [FUNC] and press [MIXER] (MKII: press [MENU]) to open the PROJECT menu, choose CONTROL, move down to SEQGEN and press [YES]. SEQGEN opens on the GEN page for the current track; [NO] closes it. On a MIDI track it shows "SEQGEN: AUDIO TRACKS ONLY" and does not open.
 
 SEQGEN owns the trig bit, slide bit and PTCH/HOLD/VOL locks of the steps inside the track length. It writes conditions, micro-timing and RTRG/RTIM only where PROB, GRV or RTCH asked for them. Recorder trigs, swing, steps past the track length and every other lock stay intact; a kept lock on a new rest becomes a trigless lock. Duplicate a pattern before replacing work you want to keep: undo holds one step.
 
 ## Quick tutorial
 
-1. Select an audio track with a tuned one-shot loaded and press PLAY. Hold [TRACK n] and press [RIGHT] to open SEQGEN on the GEN page.
+1. Select an audio track with a tuned one-shot loaded and press PLAY. Hold [FUNC] and press [MIXER] (MKII: [MENU]), choose CONTROL > SEQGEN and press [YES].
 2. Turn DENS (encoder B) to about 10 to write a phrase; press [YES] for new variations. Press [RIGHT] twice for KEY and pick a scale with SCAL.
-3. Press [LEFT] for EVO, set EVO to SWIZ and press [YES] to shuffle the phrase; press [NO] to undo it. Press the TRACK key to close the page; the phrase keeps playing as ordinary trigs.
+3. Press [LEFT] for EVO, set EVO to SWIZ and press [YES] to shuffle the phrase; hold [FUNC] and press [NO] to undo it. Press [NO] to close SEQGEN; the phrase keeps playing as ordinary trigs.
 
 ## Compatibility and limitations
 
@@ -66,13 +76,15 @@ SEQGEN owns the trig bit, slide bit and PTCH/HOLD/VOL locks of the steps inside 
 - Pitch is limited to the native ±12-semitone PTCH range.
 - Not implemented, because they would need a second clock: Vector's free-run lanes, free clock rates (X16/P16/SPD/PCT) and live sub-sequencers. A sub-sequencer that writes into locks is planned as a later add-on.
 - Direction modes are left to the Play Modes module.
-- The trig-condition, micro-timing and RTRG/RTIM encodings are unverified until the emulator check in TESTING.md. PROB, GRV and RTCH default to 0, which writes none of them.
-- SEQGEN's dial settings are runtime only in v0.1: they return to defaults after a reboot or project load. The generated phrase is ordinary pattern data and saves and reloads with the project as stock.
-- Stock-flow change: one new gesture (above). Its README entry, alternatives and the neighbouring flows checked will be completed with the native glue.
+- The trig-condition and micro-timing encodings were confirmed under the emulator; the number of audible RTRG hits is not yet confirmed on hardware. PROB, GRV and RTCH default to 0, which writes none of them.
+- SEQGEN's settings are runtime only in v0.1: one set per audio track (T1-T8), shared by all patterns and Parts, kept while the unit is on and back to defaults after a power cycle. They are not saved with the project. The generated phrase is ordinary pattern data and saves and reloads with the project as stock.
+- Undo holds one change across all tracks; it applies only while the same bank, Part and pattern are selected.
+- **Stock-flow change: one new menu row.** PROJECT > CONTROL gains a seventh row, SEQGEN, after METRONOME, for everyone with SEQGEN installed. Why: SEQGEN needs a page, and the key chords were taken ([TRACK]+[LEFT]/[RIGHT] is stock sample tempo nudge; [FUNC]+[TRACK] mutes) or owned by Play Modes ([TRACK]+[UP]/[DOWN]); the CONTROL list is data-driven, so the row needs no change to stock code. What you see: the extra row; the six stock rows and their pages are unchanged. To remove it, build without SEQGEN. Neighbouring flows checked under the emulator: every stock CONTROL page opens identically, NO leaves the menu as stock, and the PROJECT top-level menu is unchanged (TESTING.md).
+- The UI tick also calls SEQGEN once per frame (one stock call later than the site VECTOR, POLY8 and Analog BD use), so it composes with them.
 
 ## Tests and measurements
 
-See [TESTING.md](TESTING.md). Only the firmware-free engine gate (`verify.py`) has run.
+See [TESTING.md](TESTING.md): the firmware-free engine and assembly-reproducibility gate (`verify.py`) and a recorded emulator walk. Performance, `module:verify` and hardware are not done yet.
 
 ## Authorship and licences
 
@@ -80,4 +92,4 @@ Original SEQGEN engine, tests, documentation and thumbnail by @yes0have0some, MI
 
 ## Screens and audio
 
-Pending: real black-and-white LCD captures of the access gesture and the three pages come from the emulator walk.
+Emulator LCD captures (MKI panel) in `media/`, provenance in `media/capture.json`: the CONTROL row, the GEN, EVO and KEY pages, and a generated PTCH lock on the stock PLAYBACK page.

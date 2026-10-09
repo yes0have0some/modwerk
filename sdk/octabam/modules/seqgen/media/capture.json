@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "moduleId": "seqgen",
+  "moduleVersion": "0.1.0-experimental",
+  "captured": "2026-10-09",
+  "firmware": "1.40C",
+  "imageSha256": "95f9b81aab82749e550f83d3ae67ba77e11a1a7d51c930fbf6685a15baf1b076",
+  "baseSha256": "164f31224bf61181e3f50e7dec40df9afcae5b16dbf6e4c0d0cc5e986af0a84e",
+  "emulator": "octabam native ColdFire port (ot_emu), built from this branch",
+  "emulatorSha256": "1955bc62101451796570b4dde49da6acc90a495504cdb62fce78c8e37938d718",
+  "compiler": "m68k-elf-gcc (GCC) 16.2.0",
+  "toolchainImage": "sha256:0194c7b94bbcca8540b6aae6ab1efaba8b56f1d0aa53d114a5a9bb0488ee9505",
+  "builtFromRevision": "49f834befc0719d6d4e7902c12028fa5abb2af3f plus the uncommitted SEQGEN glue recorded in nativeBuildInputs",
+  "setup": "Native ColdFire port (ot_emu, no DSP), MKI panel; original 1.40C plus SEQGEN only (static stock DSP); blank scratch card, stock first-boot DATE/TIME prompt confirmed with YES; T1 Static, pattern A01, 120 BPM, stopped transport. Actual LCD plane plus visible stock windows rendered at 6x nearest-neighbour in monochrome. No physical hardware or audio qualification.",
+  "keyMs": 150,
+  "plan": [
+    {
+      "press": [
+        "YES"
+      ]
+    },
+    {
+      "wait": 500
+    },
+    {
+      "hold": [
+        "FUNC"
+      ]
+    },
+    {
+      "press": [
+        "MIXER"
+      ]
+    },
+    {
+      "release": [
+        "FUNC"
+      ]
+    },
+    {
+      "wait": 400
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "YES"
+      ]
+    },
+    {
+      "wait": 400
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "press": [
+        "DOWN"
+      ]
+    },
+    {
+      "wait": 300
+    },
+    {
+      "capture": "ot-location.png"
+    },
+    {
+      "press": [
+        "YES"
+      ]
+    },
+    {
+      "wait": 400
+    },
+    {
+      "encoder": {
+        "name": "B",
+        "delta": 2
+      }
+    },
+    {
+      "wait": 300
+    },
+    {
+      "capture": "ot-gen.png"
+    },
+    {
+      "press": [
+        "RIGHT"
+      ]
+    },
+    {
+      "wait": 300
+    },
+    {
+      "capture": "ot-evo.png"
+    },
+    {
+      "press": [
+        "RIGHT"
+      ]
+    },
+    {
+      "wait": 300
+    },
+    {
+      "capture": "ot-key.png"
+    },
+    {
+      "press": [
+        "NO"
+      ]
+    },
+    {
+      "wait": 300
+    },
+    {
+      "press": [
+        "NO"
+      ]
+    },
+    {
+      "wait": 300
+    },
+    {
+      "press": [
+        "NO"
+      ]
+    },
+    {
+      "wait": 400
+    },
+    {
+      "press": [
+        "REC"
+      ]
+    },
+    {
+      "wait": 300
+    },
+    {
+      "hold": [
+        "TRIG1"
+      ]
+    },
+    {
+      "wait": 400
+    },
+    {
+      "capture": "ot-generated.png"
+    },
+    {
+      "release": [
+        "TRIG1"
+      ]
+    },
+    {
+      "wait": 200
+    },
+    {
+      "press": [
+        "REC"
+      ]
+    },
+    {
+      "wait": 200
+    }
+  ],
+  "nativeBuildInputs": {
+    "engine.c": "6f4016857419b04afc244684cf106a19010cce456c4b3e014743378ef5a5da43",
+    "engine.h": "6514639611cdc82d418062b219e3f5bf4e5a711101fd759925dd7f7bb7c99414",
+    "native.c": "120ceb4f89ca64547dd062234d880a2873e774414dd1f384689b7b8d9ff84bf0",
+    "hooks.s": "9cd1a24e1459247cb4f479ccfc868eea7ac2a0cadfff3737254d5a5f2f7d7100",
+    "prepare.py": "8fc4e1ded037a7fc42795341aa66bcfb859583fdb3df88f261e1006e1265d60d",
+    "manifest.py": "42458d63065faab3765eab97717b67d955a0b18e0c40309c8456680c05afae1c",
+    "control.s": "42c90db3007ad2ee6a1e9cfb2121536961660e126a7ec062477bf770442facb7",
+    "verify.py": "89326a5e003f317e206ca0b731b0956e0b20efde4ab5d55bf5b43ab576aa9e13",
+    "test_engine.c": "b5bef0d1aa3e199c85ffea6c2b490e0c1d25aaf65ca7e903adfa85974254ce66"
+  },
+  "screenshots": {
+    "ot-evo.png": "c6a28a39eef01b271b63bcf5d892cb4516c35ac8ba88a928342c2d74e01cc0d6",
+    "ot-gen.png": "0431f10edb38521e29d0a7398a6ba5abef136e48d8db18160b70e10024edd991",
+    "ot-generated.png": "459ff60cd5a2b5ddee0ed8173aab9c95d1f926c3d4c13d13a149284dd4d9ab7e",
+    "ot-key.png": "c22c1f679473b9ff7c1a2e54fffccd289d073a60fc780c6a6e3fd276cf5305fa",
+    "ot-location.png": "48721eb500d4498d93414598d86e912bfdd0bafa12d59e171591c188e1a64271"
+  }
+}

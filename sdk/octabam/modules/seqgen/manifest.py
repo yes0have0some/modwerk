@@ -1,76 +1,47 @@
-"""<Module name> -- one line on what it changes in the firmware.
+"""SEQGEN -- generate, evolve and scale-lock a phrase on the current audio
+track, opened from PROJECT > CONTROL > SEQGEN. Writes real trigs and locks
+into the current pattern; the stock sequencer plays them. No clock of its own.
 
-THE SKELETON OF A COLDFIRE MODULE: code the build links and places for
-you, reached from stock code by detours you name by SYMBOL. Copy this
-directory to modules/<yourname>/ and edit. Directories starting with `_`
-are skipped by the registry, so this file is never built.
+One DRAM unit (control.s, compiled from engine.c + native.c by prepare.py,
+plus hooks.s). What it changes in the stock firmware:
 
-modules/repitch/ is a finished one (one linked unit, detours, pokes);
-modules/midi-scenes/ another (units built from the author's repository as
-a submodule). docs/remixer/MODULES.md "Declaring a ColdFire
-module" is the guide; docs/remixer/PLACEMENT.md says where the bytes go.
+  0x400cbd54  CONTROL list row count 6 -> 7 (poke)
+  0x400cbd6c  CONTROL rows pointer -> seqgen_control_rows (symbol ref): the six
+              stock nodes copied from the user's own OS (StockCopy of
+              0x400cc5a8, 144 bytes) plus the SEQGEN node, page id 0, so the
+              stock menu calls seqgen_open on YES (READ 0x40065010..0x4006505c)
+  0x40052232  the UI tick's `jsr 0x4003fed8` -> seqgen_tick_hook (detour):
+              redraw on track change and AUTO evolve on loop wraps
 
-Say what the module is, which stock routines it changes, what is measured
-and what is inferred. Delete every comment below once answered.
+The page is a stock window (0x4005829c, priority 2 over the menu's 1) with
+SEQGEN's own input layer (push 0x40031494 / pop 0x4003146c). Settings are
+runtime RAM only, defaults at boot. Measured under the ColdFire port; not yet
+on hardware (TESTING.md).
 """
-
-from remix.schema import Category, Proof, Gate, Detour, Kind, Linked, Module, Poke
+from remix.schema import Category, Detour, Gate, Kind, Linked, Module, Poke, Proof, StockCopy, SymbolRef
 from remix.stock_guard import stock_guard
 
 MODULE = Module(
-    # `name` MUST equal the directory name. `key` is the build identifier and
-    # appears in the build report, which other tools parse -- so it is API.
     name="seqgen",
     key="SEQGEN",
-    kind=Kind.CF_PATCH,             # no DSP code, no chooser row
+    kind=Kind.CF_PATCH,
     doc="Generate, evolve and scale-lock audio-track phrases as real trigs and locks.",
     category=Category.MACHINES, author="yes0have0some", author_url="https://github.com/yes0have0some",
-    proof=Proof.UNTESTED, proof_note="Development scaffold; no module behavior has been verified.",
-
-    # ---- the code: GNU-as units, linked by the build ----------------------
-    # ORDER IS LINK ORDER: a unit may reference symbols of units before it.
-    # `dram=True` puts the unit in the platform runtime (linked with every
-    # other DRAM unit in the remix, appended behind the loader, depacked at
-    # boot into the platform's 10 MB reserve at the bottom of the audio
-    # page arena -- where anything bigger than a few hundred bytes
-    # belongs; the unit gives up 10 MB of sample memory). `dram=False` places
-    # it in one of the OS image's free zero runs (~8 KB, shared by everyone)
-    # for code that must be ROM-resident. Sources are `.s` for m68k-elf-as;
-    # `cpu="5407"` and "5475" encode this ISA subset identically.
-    linked=(
-        Linked("unit", "modules/seqgen/unit.s", dram=True),
-        # Building from someone else's repository? Add it as a submodule
-        # under modules/<name>/upstream and point `source` into it; the
-        # sources stay theirs and an update is a submodule bump.
-        # `reference=(addr, sha256)` re-links the unit at the AUTHOR'S own
-        # address on every build and compares, so a drift from the bytes
-        # they ratified fails loudly.
+    proof=Proof.PORT, proof_note="Emulator (ColdFire port) walk recorded in TESTING.md; hardware untested.",
+    linked=(Linked("seqgen", "modules/seqgen/control.s", cpu="5475", dram=True, stock_copies=(
+        StockCopy("seqgen_control_rows", stock_guard(0x400cc5a8, 144, "57635ae6276786cdb31617d61e34b92c461da742b0452222ebca4fc03b7394e4")),
+    )),),
+    symbol_refs=(
+        SymbolRef(0x400cbd6c, 0x400cc5a8, "seqgen", "seqgen_control_rows",
+                  note="PROJECT > CONTROL rows: the six stock rows, then SEQGEN"),
     ),
-
-    # ---- how stock code reaches it: detours, wired by symbol --------------
-    # `site` is a stock instruction; `expect` its bytes (whole instructions,
-    # asserted before anything is written -- a site that has moved stops
-    # the build). `kind`: "jmp" for a stub that replays what it displaced
-    # and jumps on (the common case), "jsr" for a callable that returns,
-    # "lea" to rewrite a six-byte `lea abs.l,An`'s operand. `pad_to` nops
-    # the rest of a displaced span longer than six bytes.
     detours=(
-        # Detour(0x400xxxxx, stock_guard(0x400xxxxx, 8, "<sha256>"), "unit", "my_hook",
-        #        "what this hook is for", kind="jsr", pad_to=None),
+        Detour(0x40052232, stock_guard(0x40052232, 6, "c3fac011822a446d035f0a884bf61c92652e2ff30dceccbaada98aa09726f156"),
+               "seqgen", "seqgen_tick_hook", "UI tick: SEQGEN redraw and AUTO evolve (replays jsr 0x4003fed8)"),
     ),
-
-    # ---- plain asserted rewrites ------------------------------------------
     pokes=(
-        # Poke(0x400xxxxx, expect=stock_guard(0x400xxxxx, 2, "<sha256>"),
-        #      write=bytes.fromhex("6012"), note="bne -> bra: never re-apply"),
+        Poke(0x400cbd54, stock_guard(0x400cbd54, 4, "b253668f6b59f1ff28522831931e4d3c5a3de533965af22e961735437c0172cb"),
+             bytes.fromhex("00000007"), "PROJECT > CONTROL: 6 -> 7 rows (+ SEQGEN)"),
     ),
-
     gates=(Gate("modules/seqgen/verify.py", remix_arg=False),),
-
-    # A stock pointer array that needs more entries: TableGrow relocates it
-    # into free space with your symbols appended and repoints every
-    # reference.
-    # tables=(TableGrow("...", old=0x400xxxxx, count=16,
-    #                   symbols=(("unit", "my_row"),),
-    #                   refs=((0x400xxxxx, 0x400xxxxx),)),),
 )

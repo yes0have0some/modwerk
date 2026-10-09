@@ -225,7 +225,8 @@ static void gen_barl(SgPhrase *ph, const Ctx *c, unsigned L, unsigned dens, Rng 
 /* A cell of `cell` steps tiled across L; `drift` evolves each repetition. */
 static void gen_cell(SgPhrase *ph, const Ctx *c, unsigned L, unsigned cell, unsigned dens,
                      unsigned drift, Rng *r) {
-    SgStep proto[8] = {{0}}; uint8_t on[8]; uint16_t w[8] = {0};
+    SgStep proto[8]; uint8_t on[8]; uint16_t w[8];
+    for (unsigned i = 0; i < 8; ++i) { SgStep z = {0}; proto[i] = z; w[i] = 0; }   /* no memset in the DRAM unit */
     if (cell > 8) cell = 8;
     unsigned count = share(cell, dens); if (!count && dens) count = 1;
     w[0] = 1; pick(on, cell, count, w, r);
