@@ -92,9 +92,9 @@ int sg_rotate_record(uint8_t *record, size_t size, unsigned length, int directio
 /* Re-fit only the PTCH locks of the record to the scale (FIT = ON). */
 int sg_fit_record(uint8_t *record, size_t size, const SgParams *p);
 
-/* Trig-word encoding. UNVERIFIED until the port/emulator check in
- * TESTING.md confirms it: condition code in bits 0..6, micro-timing in
- * bits 7..12. Generation writes neither unless PROB/GRV are above zero. */
+/* Trig-word encoding, confirmed in the 1.40C emulator: condition code in
+ * bits 0..6, signed micro-timing in bits 7..12; bits 13..15 preserved.
+ * Generation writes neither unless PROB/GRV are above zero. */
 uint16_t sg_trig_word(unsigned chance, int micro);
 int sg_chance_code(unsigned percent);
 #endif

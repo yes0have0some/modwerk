@@ -186,9 +186,28 @@ static void trig_word(void) {
     assert(sg_trig_word(0, 0) == 0);
     assert(sg_chance_code(0) == 0 && sg_chance_code(100) == 0 && sg_chance_code(50) == 19);
     assert(((sg_trig_word(0, -1) >> 7) & 0x3f) == 0x3f && ((sg_trig_word(0, 23) >> 7) & 0x3f) == 23);
+    /* Emulator readbacks of stock edits (1.40C, MKI mode). */
+    assert(sg_trig_word(0, 1) == 0x0080 && sg_trig_word(1, 0) == 0x0009);
+    assert(sg_trig_word(0, -3) == 0x1e80 && sg_trig_word(0, -23) == 0x1480 && sg_trig_word(0, 23) == 0x0b80);
+    assert(sg_chance_code(87) == 24 && sg_chance_code(99) == 29);
+}
+
+static void retrig_and_flags(void) {
+    static uint8_t r[SG_TRACK_BYTES];
+    blank(r);
+    r[SG_TRIGWORD + 2 * 5] = 0xe0;                   /* unexplained high bits */
+    SgPhrase ph; SgParams p = sg_defaults; p.density = 0;
+    assert(sg_generate(&ph, &p, 16, 100));
+    ph.steps[5].on = 1; ph.steps[5].pitch = 0; ph.steps[5].hold = 20; ph.steps[5].volume = 100;
+    ph.steps[5].chance = 50; ph.steps[5].micro = -3; ph.steps[5].retrig = 3;
+    assert(sg_write_phrase(r, sizeof r, &ph));
+    assert(r[SG_LOCKS + 32 * 5 + SG_SLOT_RTRG] == 2 && r[SG_LOCKS + 32 * 5 + SG_SLOT_RTIM] == 72);
+    unsigned w = (unsigned)r[SG_TRIGWORD + 10] << 8 | r[SG_TRIGWORD + 11];
+    assert((w & 0x7f) == 19 && ((w >> 7) & 0x3f) == ((unsigned)-3 & 0x3f));
 }
 
 int main(void) {
+    retrig_and_flags();
     scales(); generation(); evolution(); transforms(); record(); settings(); trig_word();
     puts("SEQGEN engine tests passed (firmware-free; no hardware claim).");
     return 0;

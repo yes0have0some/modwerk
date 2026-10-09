@@ -476,8 +476,11 @@ int sg_write_phrase(uint8_t *rec, size_t size, const SgPhrase *ph) {
         lk[SG_SLOT_HOLD] = s->on ? s->hold : SG_NO_LOCK;
         lk[SG_SLOT_VOL] = s->on ? s->volume : SG_NO_LOCK;
         if (s->on && s->retrig) {
-            /* RTRG/RTIM lock values: UNVERIFIED, see TESTING.md. */
-            lk[SG_SLOT_RTRG] = s->retrig; lk[SG_SLOT_RTIM] = 32;
+            /* RTRG byte n shows n+1 hits (EMU/READ, 1.40C). RTIM 79/72/67 =
+             * 1/2, 1/3, 1/4 step, so every hit stays inside the step. The
+             * audible hit count is unconfirmed on hardware (TESTING.md). */
+            static const uint8_t rtim[5] = {0, 0, 79, 72, 67};
+            lk[SG_SLOT_RTRG] = (uint8_t)(s->retrig - 1u); lk[SG_SLOT_RTIM] = rtim[s->retrig];
         }
         setbit(rec, SG_MASK_TRIG, i, s->on);
         setbit(rec, SG_MASK_SLIDE, i, s->on && s->slide);
@@ -488,7 +491,9 @@ int sg_write_phrase(uint8_t *rec, size_t size, const SgPhrase *ph) {
             setbit(rec, SG_MASK_TRIGLESS, i, 0); setbit(rec, SG_MASK_ONESHOT, i, 0);
         }
         if (s->on && (s->chance || s->micro)) {
-            uint16_t w = sg_trig_word(s->chance, s->micro);
+            /* Bits 13..15 are unexplained in 1.40C: keep whatever is there. */
+            uint16_t keep = (uint16_t)((rec[SG_TRIGWORD + 2u * i] & 0xe0u) << 8);
+            uint16_t w = (uint16_t)(sg_trig_word(s->chance, s->micro) | keep);
             rec[SG_TRIGWORD + 2u * i] = (uint8_t)(w >> 8);
             rec[SG_TRIGWORD + 2u * i + 1u] = (uint8_t)w;
         }
@@ -528,9 +533,10 @@ int sg_fit_record(uint8_t *rec, size_t size, const SgParams *p) {
     return 1;
 }
 
-/* ---- trig word (UNVERIFIED encoding) -------------------------------------- */
-/* The stock X% list. Code = 9 + index assumes NONE, then FILL, NOT FILL,
- * PRE, NOT PRE, NEI, NOT NEI, 1ST, NOT 1ST precede it. */
+/* ---- trig word (1.40C, confirmed in the emulator; TESTING.md) ------------- */
+/* Codes: 0 none, 1-8 FILL/!FILL/PRE/!PRE/NEI/!NEI/1ST/!1ST, 9-29 the X% list
+ * below, then A:B = 28 + B(B-1)/2 + A up to 64. Micro-timing: signed bits
+ * 7..12 in 1/384 note (24 per 16th step), clamped to +/-23 by the UI. */
 static const uint8_t stock_pct[21] = {1, 2, 4, 6, 9, 13, 19, 25, 33, 41, 50,
                                       59, 67, 75, 81, 87, 91, 94, 96, 98, 99};
 int sg_chance_code(unsigned percent) {
