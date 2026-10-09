@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 2,
+  "id": "seqgen",
+  "key": "SEQGEN",
+  "name": "SEQGEN",
+  "version": "0.1.0-experimental",
+  "category": "machines",
+  "author": {
+    "github": "yes0have0some",
+    "credits": [
+      "yes0have0some: original SEQGEN generator, evolve, scale and record-writer code, documentation and illustration",
+      "five12 Vector sequencer user guide: musical inspiration only; no five12 code, firmware or assets used",
+      "Sam Banks / octabam (MIT): native track-record layout notes and interoperability seams",
+      "Octamod contributors / VECTOR (MIT): published track-record writing approach, referenced for layout"
+    ]
+  },
+  "nativeManifest": "manifest.py",
+  "presentation": {
+    "label": "GENERATIVE",
+    "family": "Sequence generator",
+    "summary": "Generate, evolve and scale-lock a phrase on any audio track, played by the stock sequencer.",
+    "overview": "SEQGEN writes real trigs, PTCH/HOLD/VOL locks, slides and optional chance conditions, micro-timing and retrigs into the selected audio track of the current pattern. The stock sequencer plays them, so transport, tempo, track speed, length, scale and swing stay the instrument’s own. Nine original generator styles, seven evolve styles, eighteen scales and phrase transforms are inspired by the five12 Vector sequencer. Development draft: emulator and hardware results are pending.",
+    "highlights": [
+      "Nine generators and seven evolve styles",
+      "Eighteen scales with root, re-fit and in-scale transpose",
+      "Optional evolve every 1–16 track loops, following the track’s own loop",
+      "Real, editable trigs and locks on any audio machine"
+    ],
+    "usage": [
+      "Pending: the exact access gesture is confirmed against the MKI key map before release."
+    ]
+  },
+  "controls": [
+    {
+      "name": "ALGO",
+      "default": 0,
+      "count": 9,
+      "doc": "Generator style: ACID, BARL, CELL, OBLQ, RAND, EUCL, TEKN, MIRR, DRUM. Original algorithms modelled on Vector generator behaviour; not note-identical.",
+      "labels": [
+        "ACID",
+        "BARL",
+        "CELL",
+        "OBLQ",
+        "RAND",
+        "EUCL",
+        "TEKN",
+        "MIRR",
+        "DRUM"
+      ]
+    },
+    {
+      "name": "DENS",
+      "default": 10,
+      "count": 17,
+      "doc": "0–16. Share of steps that get notes; 0 is silence. EUCL uses it as the pulse count, TEKN as the size of the pitch set.",
+      "labels": null
+    },
+    {
+      "name": "SPAN",
+      "default": 12,
+      "count": 13,
+      "doc": "0–12 semitones either side of neutral PTCH; pitches stay in the scale.",
+      "labels": null
+    },
+    {
+      "name": "GATE",
+      "default": 32,
+      "count": 128,
+      "doc": "Base AMP HOLD for generated notes, in stock HOLD units. 127 is INF and ties consecutive notes with slides.",
+      "labels": null
+    },
+    {
+      "name": "ACNT",
+      "default": 48,
+      "count": 128,
+      "doc": "Difference between accented and other notes, written as AMP VOL locks relative to the Part’s AMP VOL.",
+      "labels": null
+    },
+    {
+      "name": "SEED",
+      "default": 1,
+      "count": 128,
+      "doc": "Deterministic variation. YES advances it; other edits keep it.",
+      "labels": null
+    },
+    {
+      "name": "EVO",
+      "default": 0,
+      "count": 7,
+      "doc": "Mutation style: LOW, MED, HIGH, SWIZ (shuffle pitch, gate and volume), SW-P, SW-G, SW-V (shuffle one lane).",
+      "labels": [
+        "LOW",
+        "MED",
+        "HIGH",
+        "SWIZ",
+        "SW-P",
+        "SW-G",
+        "SW-V"
+      ]
+    },
+    {
+      "name": "AMNT",
+      "default": 25,
+      "count": 101,
+      "doc": "0–100 %. Share of steps an evolve touches.",
+      "labels": null
+    },
+    {
+      "name": "AUTO",
+      "default": 0,
+      "count": 6,
+      "doc": "OFF, or evolve every 1, 2, 4, 8 or 16 loops of the track, counted from the track’s own step counter.",
+      "labels": [
+        "OFF",
+        "1",
+        "2",
+        "4",
+        "8",
+        "16"
+      ]
+    },
+    {
+      "name": "PROB",
+      "default": 0,
+      "count": 101,
+      "doc": "0–100 %. Share of generated notes that get a stock X% trig condition (50–87 %). 0 writes no conditions.",
+      "labels": null
+    },
+    {
+      "name": "RTCH",
+      "default": 0,
+      "count": 101,
+      "doc": "0–100 %. Share of generated notes that get RTRG/RTIM retrig locks (2–4). Flex and Static only. 0 writes none.",
+      "labels": null
+    },
+    {
+      "name": "GRV",
+      "default": 0,
+      "count": 24,
+      "doc": "0–23. Largest random micro-timing offset in stock units. 0 writes none.",
+      "labels": null
+    },
+    {
+      "name": "ROOT",
+      "default": 0,
+      "count": 12,
+      "doc": "C–B. Root of the scale; the sample is assumed to sound C at neutral PTCH.",
+      "labels": [
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+        "A",
+        "A#",
+        "B"
+      ]
+    },
+    {
+      "name": "SCAL",
+      "default": 1,
+      "count": 18,
+      "doc": "Eighteen scales from Vector’s built-in list; every generated and evolved note stays in it.",
+      "labels": [
+        "CHR",
+        "MAJ",
+        "MIN",
+        "DOR",
+        "PHR",
+        "LYD",
+        "MIX",
+        "LOC",
+        "HMIN",
+        "MMIN",
+        "WHL",
+        "OCT1",
+        "OCT2",
+        "PMAJ",
+        "PMIN",
+        "BLUS",
+        "MAJ7",
+        "DOM7"
+      ]
+    },
+    {
+      "name": "FIT",
+      "default": 0,
+      "count": 2,
+      "doc": "ON also re-fits the track’s existing PTCH locks when SCAL or ROOT changes.",
+      "labels": [
+        "OFF",
+        "ON"
+      ]
+    },
+    {
+      "name": "TRNS",
+      "default": 12,
+      "count": 25,
+      "doc": "−12 to +12 scale steps; stored midpoint 12 means none.",
+      "labels": null
+    }
+  ],
+  "compatibility": {
+    "firmware": "1.40C",
+    "location": "Audio tracks",
+    "conflicts": [],
+    "limitations": [
+      "Development draft: native glue, emulator, MKI hardware and persistence are not tested yet.",
+      "Generated pitch is limited to the native ±12-semitone PTCH range on audio tracks. MIDI tracks are planned for a later version.",
+      "Free-run lanes, Vector’s free clock rates and live sub-sequencers are not implemented: they would need a second clock. A lock-based sub-sequencer page is planned as a later add-on.",
+      "Direction modes are left to the Play Modes module.",
+      "Trig-condition, micro-timing and RTRG/RTIM encodings are unverified until the emulator check; PROB, GRV and RTCH default to 0, which writes none of them."
+    ],
+    "effectId": null
+  },
+  "resources": {
+    "recorded": "Not measured",
+    "storage": {
+      "label": "Storage",
+      "display": "Not measured",
+      "value": null,
+      "unit": "unknown",
+      "method": "unmeasured",
+      "conditions": "No measurements exist yet. Add exact conditions and source evidence when available.",
+      "source": "TESTING.md"
+    },
+    "processing": {
+      "label": "CPU / DSP load",
+      "display": "Not measured",
+      "value": null,
+      "unit": "unknown",
+      "method": "unmeasured",
+      "conditions": "No measurements exist yet. Add exact conditions and source evidence when available.",
+      "source": "TESTING.md"
+    }
+  },
+  "tests": {
+    "report": "TESTING.md",
+    "summary": "Firmware-free engine and record-writer tests pass under ASan/UBSan (verify.py). Native glue, emulator, performance and MKI hardware results are pending; this draft cannot pass publication checks.",
+    "hardwareStatus": "untested",
+    "evidenceRevision": "b8deefc88b2c3e5f3c6158e364eb741df1924e1d",
+    "gates": [
+      "Worst-case cycles under parameter modulation and maximum load",
+      "Exact memory region and maximum-instance totals",
+      "Owner-reviewed real-hardware evidence with actual coverage and limitations"
+    ]
+  },
+  "license": {
+    "spdx": "MIT",
+    "file": "LICENSE",
+    "declaration": "Original SEQGEN engine, tests, documentation and illustration by yes0have0some under MIT. Native interoperability follows MIT octabam (Sam Banks) and the published MIT VECTOR record layout; their notices are retained. The five12 Vector sequencer user guide is musical inspiration only: no five12 code, firmware, tables or assets were used, and no endorsement is claimed. No Elektron firmware or extracted routines are included."
+  },
+  "media": [],
+  "access": {
+    "location": "Pending confirmation against the MKI key map: hold [TRACK n] and press [RIGHT] on an audio track to open the SEQGEN page (fallback FUNC + TRACK + RIGHT).",
+    "steps": [
+      "Pending: written after the native glue and emulator walk confirm the gesture and pages."
+    ],
+    "screenshots": []
+  }
+}

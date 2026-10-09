@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="192" viewBox="0 0 320 192" role="img" aria-labelledby="title desc">
+ <title id="title">SEQGEN: generate, evolve, scale-lock</title>
+ <desc id="desc">A sixteen-step phrase of note bars on a scale grid; one note moves to a new scale tone with an arrow. Original illustration, not an Octatrack LCD capture.</desc>
+ <rect width="320" height="192" rx="8" fill="#111218"/>
+ <defs><marker id="a" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L6 3L0 6z" fill="#f5c542"/></marker></defs>
+ <g stroke="#fff" opacity=".07" stroke-width=".7">
+  <path d="M24 44H296"/>
+  <path d="M24 58H296"/>
+  <path d="M24 72H296"/>
+  <path d="M24 86H296"/>
+  <path d="M24 100H296"/>
+  <path d="M24 114H296"/>
+  <path d="M24 128H296"/>
+  <path d="M24 142H296"/>
+  <path d="M24 156H296"/>
+ </g>
+ <rect x="24" y="114" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="45" y="150" width="7" height="3" fill="#fff" opacity=".25"/>
+ <rect x="58" y="86" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="75" y="114" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="96" y="150" width="7" height="3" fill="#fff" opacity=".25"/>
+ <rect x="109" y="58" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="126" y="114" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="147" y="150" width="7" height="3" fill="#fff" opacity=".25"/>
+ <rect x="160" y="128" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="181" y="150" width="7" height="3" fill="#fff" opacity=".25"/>
+ <rect x="194" y="86" width="15" height="8" rx="2" fill="#f5c542"/>
+ <rect x="211" y="72" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="232" y="150" width="7" height="3" fill="#fff" opacity=".25"/>
+ <rect x="245" y="114" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="266" y="150" width="7" height="3" fill="#fff" opacity=".25"/>
+ <rect x="279" y="44" width="15" height="8" rx="2" fill="#e8e8ee"/>
+ <rect x="194" y="58" width="15" height="8" rx="2" fill="none" stroke="#f5c542" stroke-dasharray="3 2"/>
+ <path d="M201.5 70V80" stroke="#f5c542" stroke-width="1.6" marker-end="url(#a)"/>
+ <text x="24" y="30" fill="#fff" font-family="monospace" font-size="15" font-weight="700">SEQGEN</text>
+ <text x="296" y="30" fill="#9a9aa6" font-family="monospace" font-size="11" text-anchor="end">GEN · EVO · KEY</text>
+ <text x="24" y="178" fill="#9a9aa6" font-family="monospace" font-size="10">16 STEPS · A MIN</text>
+</svg>

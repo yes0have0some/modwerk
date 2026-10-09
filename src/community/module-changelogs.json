@@ -827,6 +827,17 @@
           "Hardware deadlines, broad lifecycle combinations, note recording and public packaging remain unqualified."
         ]
       }
+    ],
+    "seqgen": [
+      {
+        "version": "0.1.0-experimental",
+        "date": "2026-10-09",
+        "changes": [
+          "First release of SEQGEN: nine original generator styles (ACID, BARL, CELL, OBLQ, RAND, EUCL, TEKN, MIRR, DRUM), seven evolve styles, eighteen scales with root, re-fit and in-scale transpose, invert, double, rotate and one-level undo, written as real trigs and PTCH/HOLD/VOL locks that the stock sequencer plays with its own tempo, track speed, length and swing.",
+          "Optional AUTO evolve every 1-16 loops follows the track's own step counter; PROB, RTCH and GRV add stock chance conditions, retrig locks and micro-timing only when set above 0.",
+          "Limits: audio tracks only, pitch within the native ±12-semitone PTCH range; free-run lanes, free clock rates and live sub-sequencers are not implemented. Hardware results are listed in TESTING.md."
+        ]
+      }
     ]
   }
 }
